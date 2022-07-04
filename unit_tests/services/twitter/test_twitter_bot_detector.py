@@ -141,7 +141,7 @@ class TestTwitterBotDetector(unittest.TestCase):
     )
     def test_verify_max_botometer_requests(self, mock_botometer):
         """Verify exception is raised if we exceed limit of requests."""
-        accounts_lst = MOCK_ACCOUNTS_LST * 10
+        accounts_lst = MOCK_ACCOUNTS_LST * 8
         mock_botometer.Botometer = MagicMock()
         twitter_accounts_bot_detector = TwitterAccountsBotDetector()
         with self.assertRaises(MaxBotAccountsPerRequets) as ctx:
