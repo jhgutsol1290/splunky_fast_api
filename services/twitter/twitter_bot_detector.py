@@ -19,7 +19,7 @@ class TwitterAccountsBotDetector:
     def __init__(self) -> None:
         """Init method.
 
-        Consider that we have only 500 requests per day.
+        Consider we have only 500 requests per day.
         See: https://github.com/IUNetSci/botometer-python
         """
         self.bom = botometer.Botometer(
