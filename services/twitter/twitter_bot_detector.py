@@ -16,13 +16,13 @@ IS_BOT_SCORE = 0.6
 class TwitterAccountsBotDetector:
     """Tweet Bots detector class."""
 
-    def __init__(self, botometer_api: botometer.Botometer) -> None:
+    def __init__(self) -> None:
         """Init method.
 
         Consider that we have only 500 requests per day.
         See: https://github.com/IUNetSci/botometer-python
         """
-        self.bom = botometer_api(
+        self.bom = botometer.Botometer(
             wait_on_ratelimit=True,
             rapidapi_key=rapidapi_key,
             **TwitterAuthenticatorData().dict(),
@@ -48,7 +48,7 @@ class TwitterAccountsBotDetector:
                 accounts=accounts_lst
             )
         ]
-        print(json.dumps(accounts_verified, indent=4))
+        # print(json.dumps(accounts_verified, indent=4))
         return accounts_verified
 
     @staticmethod
@@ -76,9 +76,6 @@ class TwitterAccountsBotDetector:
         `Exception`
             Missing data.
         """
-        print("Result ==== ")
-        print(json.dumps(result, indent=4))
-
         try:
             return {
                 "user_screen_name": screen_name,
@@ -93,10 +90,10 @@ class TwitterAccountsBotDetector:
             raise Exception(f"Missing data for account {screen_name}") from e
 
 
-# result = bom.check_account("@ScaryCommie1917") #!Bot account
+# result = bom.check_account("@ScaryCommie1917") #! Bot account
 
 
 if __name__ == "__main__":
-    TwitterAccountsBotDetector(
-        botometer_api=botometer.Botometer
-    ).check_accounts(accounts_lst=["@elonmusk", "@ScaryCommie1917"])
+    TwitterAccountsBotDetector().check_accounts(
+        accounts_lst=["@elonmusk", "@ScaryCommie1917"]
+    )

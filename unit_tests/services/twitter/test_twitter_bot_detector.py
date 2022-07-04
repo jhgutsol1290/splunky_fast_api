@@ -98,9 +98,7 @@ class TestTwitterBotDetector(unittest.TestCase):
     ) -> None:
         """Test check_accounts method."""
         mock_botometer.Botometer = MagicMock()
-        twitter_accounts_bot_detector = TwitterAccountsBotDetector(
-            botometer_api=mock_botometer.Botometer
-        )
+        twitter_accounts_bot_detector = TwitterAccountsBotDetector()
         twitter_accounts_bot_detector.bom = MagicMock()
         twitter_accounts_bot_detector.bom.check_accounts_in.return_value = (
             mock_botometer_accounts_response
@@ -145,9 +143,7 @@ class TestTwitterBotDetector(unittest.TestCase):
         """Verify exception is raised if we exceed limit of requests."""
         accounts_lst = MOCK_ACCOUNTS_LST * 10
         mock_botometer.Botometer = MagicMock()
-        twitter_accounts_bot_detector = TwitterAccountsBotDetector(
-            botometer_api=mock_botometer.Botometer
-        )
+        twitter_accounts_bot_detector = TwitterAccountsBotDetector()
         with self.assertRaises(MaxBotAccountsPerRequets) as ctx:
             twitter_accounts_bot_detector.check_accounts(
                 accounts_lst=accounts_lst
