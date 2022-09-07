@@ -13,6 +13,7 @@ from schemas.responses.tweet import (
     ResponseCountTweets,
     ResponseTweetNoHashtagOut,
     ResponseTweetsNoHashtagOut,
+    ReturnMetrics,
 )
 from services.sentiment_analyzer.vader_sentiment_analyzer import (
     VaderSentimentAnylyzer,
@@ -21,6 +22,11 @@ from services.twitter.twitter_data import TwitterDataCollector
 from utils.tweet.tweet_http_utils import (
     verify_hashtag,
 )
+import os, logging
+
+logging.basicConfig()
+logger = logging.getLogger()
+logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
 router = APIRouter(tags=["Tweets"])
 
@@ -121,3 +127,37 @@ async def get_total_count_sentiment_classification():
     """Retrieve count of records of the given sentiment_classificator."""
     data = await DBTweetController.get_total_count()
     return ResponseCountTweets(detail="Data retrieved successfully", data=data)
+
+
+@router.get(
+    "/tweets/metrics/",
+    status_code=200,
+    responses={200: {"model": ReturnMetrics}},
+)
+async def get_twitter_metrics():
+    """Retrieve twitter metrics for the user."""
+    results = {
+            "tweets_count": 0,
+            "most_used_hashtag": "",
+            "hashtag_count": {},
+            "most_retweeted": ""
+        }
+    data = await DBTweetController.fetch_twitter_metrics()
+    hashtag_count = count_hashtags(data=data)
+    results["tweets_count"] = len(data)
+    results["most_used_hashtag"] = max(hashtag_count, key=hashtag_count.get)
+    results["hashtag_count"] = hashtag_count
+
+    return ReturnMetrics(detail="Metrics obtained successfully", data=data)
+
+
+# TODO: this function must be placed somewhere else
+def count_hashtags(data: list) -> dict:
+    hashtag_count_dict = {}
+    for item in data:
+        hashtag = data.title
+        if hashtag not in hashtag_count_dict.keys():
+            hashtag_count_dict[hashtag] = 1
+        else:
+            hashtag_count_dict[hashtag] += 1
+    return hashtag_count_dict

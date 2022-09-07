@@ -30,3 +30,17 @@ class CountTweetBase(BaseModel):
 
     sentiment_classificator: SentimentClassificationEnum
     count: int
+
+
+class MetricsBase(BaseModel):
+    """Base metrics model"""
+
+    tweets_count: int
+    most_used_hashtag: str
+    hashtag_count: dict
+    most_retweeted: str
+    # most_liked: str
+    # most_clicked: str
+    # average_retweets: float
+    # average_likes: float
+    # percentiles: Dict

@@ -129,3 +129,14 @@ class DBTweetController(IDBTweetController):
             await database.execute(
                 sentiment_classificator.insert().values(sentiment_data)
             )
+
+    @staticmethod
+    async def fetch_twitter_metrics() -> list:
+        """Retrieve all the tweets and their hashtags."""
+        
+        query = select(
+            tweet.c.id,
+            hashtag.c.title
+        ).select_from(tweet.join(hashtag))
+
+        return await database.fetch_all(query=query)

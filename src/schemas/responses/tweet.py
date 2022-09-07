@@ -2,7 +2,7 @@
 
 from typing import List
 from models.enums import SentimentClassificationEnum
-from schemas.base import CountTweetBase, TweetBase, ResponseBase
+from schemas.base import CountTweetBase, TweetBase, ResponseBase, MetricsBase
 
 
 class TweetOut(TweetBase):
@@ -43,3 +43,9 @@ class ResponseCountTweets(ResponseBase):
 
     # data: Union[List[CountTweetBase], CountTweetBase]
     data: List[CountTweetBase] | CountTweetBase
+
+
+class ReturnMetrics(ResponseBase):
+    """Metrics schema."""
+
+    data: MetricsBase | None
