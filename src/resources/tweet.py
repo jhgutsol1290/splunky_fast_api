@@ -22,6 +22,9 @@ from services.twitter.twitter_data import TwitterDataCollector
 from utils.tweet.tweet_http_utils import (
     verify_hashtag,
 )
+from utils.tweet.tweet_utils import (
+    count_hashtags
+)
 import os, logging
 
 logging.basicConfig()
@@ -145,19 +148,7 @@ async def get_twitter_metrics():
     data = await DBTweetController.fetch_twitter_metrics()
     hashtag_count = count_hashtags(data=data)
     results["tweets_count"] = len(data)
-    results["most_used_hashtag"] = max(hashtag_count, key=hashtag_count.get)
+    results["most_used_hashtag"] = max(hashtag_count, key=hashtag_count.get) if hashtag_count else ""
     results["hashtag_count"] = hashtag_count
 
     return ReturnMetrics(detail="Metrics obtained successfully", data=data)
-
-
-# TODO: this function must be placed somewhere else
-def count_hashtags(data: list) -> dict:
-    hashtag_count_dict = {}
-    for item in data:
-        hashtag = data.title
-        if hashtag not in hashtag_count_dict.keys():
-            hashtag_count_dict[hashtag] = 1
-        else:
-            hashtag_count_dict[hashtag] += 1
-    return hashtag_count_dict

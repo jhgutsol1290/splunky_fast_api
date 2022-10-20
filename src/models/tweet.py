@@ -17,4 +17,5 @@ tweet = sqlalchemy.Table(
         sqlalchemy.ForeignKey("hashtags.id"),
         nullable=True,
     ),
+    sqlalchemy.Column("retweets", sqlalchemy.Integer, default=0)
 )
